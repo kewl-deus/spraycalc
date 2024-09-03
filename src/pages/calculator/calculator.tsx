@@ -41,7 +41,9 @@ export default function Calculator() {
         ]
     } as DosageConfig);
 
+    // @ts-ignore
     const [total, setTotal] = useState<VolumeArea>({volume: 2000, area: 10});
+    // @ts-ignore
     const [rest, setRest] = useState<VolumeArea>({volume: 200, area: 1});
     // @ts-ignore
     const [delta, setDelta] = useState<VolumeArea>(() => {
@@ -54,15 +56,17 @@ export default function Calculator() {
     const [mixtures, setMixtures] = useState<MediumMixture[]>([]);
 
     useEffect(() => {
-        console.log("useEffect");
-        reCalc();
+        //console.log("useEffect");
+        reCalc(total, rest);
     }, [delta])
 
-    function reCalc() {
-        console.log("reCalc");
+    function reCalc(total: VolumeArea, rest: VolumeArea) {
+        //console.log("reCalc", total, rest);
+        setTotal(total);
+        setRest(rest);
         let sumMediumDosages: number = 0;
         let sumMediumVolumes: number = 0;
-        const mixtures = dosageConfig.dosages.map(dosage => {
+        const newMixtures = dosageConfig.dosages.map(dosage => {
                 const mixture: MediumMixture = {
                     ...dosage,
                     volume: dosage.dosage * delta.area
@@ -72,15 +76,17 @@ export default function Calculator() {
                 return mixture;
             }
         );
-        console.log("total", total);
-        console.log("mixtures", mixtures);
         const water: MediumMixture = {
             medium: "Wasser",
             dosage: rest.volume - sumMediumDosages,
             volume: delta.volume - sumMediumVolumes
         }
-        console.log("water", water);
-        setMixtures([water, ...mixtures]);
+        //console.log("mixtures", mixtures);
+        setMixtures([water, ...newMixtures]);
+    }
+
+    function formatNumber(value: number, unit: string): string {
+        return value !== null ? `${value} ${unit}` : 'N/A';
     }
 
     return (
@@ -90,17 +96,17 @@ export default function Calculator() {
 
             <DataTable value={mixtures}>
                 <Column field="medium" header="Name"></Column>
-                <Column field="dosage" header="Dosierung"></Column>
-                <Column field="volume" header="Volume"></Column>
+                <Column field="dosage" header="Dosierung" dataType="numeric" align="right"
+                        body={(rowData: MediumMixture) => formatNumber(rowData.dosage, "l/ha")}/>
+                <Column field="volume" header="Volume" dataType="numeric" align="right"
+                        body={(rowData: MediumMixture) => formatNumber(rowData.volume, "l")}/>
             </DataTable>
 
-            <VolumeAreaSlider label="Rest" data={rest} onChange={(v) => {
-                setRest(v);
-                reCalc();
+            <VolumeAreaSlider label="Rest" data={rest} minVolume={0} maxVolume={total.volume} onChange={(v) => {
+                reCalc(total, v);
             }}/>
-            <VolumeAreaSlider label="Total" data={total} onChange={(v) => {
-                setTotal(v);
-                reCalc();
+            <VolumeAreaSlider label="Total" data={total} minVolume={rest.volume} maxVolume={dosageConfig.tank.volume} onChange={(v) => {
+                reCalc(v, rest);
             }}/>
 
         </>
