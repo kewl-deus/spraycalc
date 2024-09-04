@@ -23,3 +23,17 @@ export interface VolumeArea {
   volume: number;
   area: number;
 }
+
+export class VolumeAreaImpl implements VolumeArea{
+  volume: number;
+  area: number;
+
+  constructor(volume: number, area: number) {
+    this.volume = volume;
+    this.area = area;
+  }
+
+  calcRatio(): number {
+    return this.volume / this.area;
+  }
+}

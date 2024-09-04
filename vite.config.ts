@@ -20,7 +20,7 @@ export default defineConfig({
                 name: 'Spray Calculator',
                 short_name: 'Spray Calc',
                 description: 'Spray Calculation App',
-                theme_color: '#673ab8',
+                theme_color: '#689f38',
             },
 
             workbox: {

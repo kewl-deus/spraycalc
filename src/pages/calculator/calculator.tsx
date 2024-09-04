@@ -1,4 +1,3 @@
-import {Toolbar} from "primereact/toolbar";
 import {DataTable} from "primereact/datatable";
 import {Column} from "primereact/column";
 import {useEffect, useState} from "react";
@@ -7,7 +6,7 @@ import VolumeAreaSlider from "../../components/volume-area-slider/volume-area-sl
 
 export default function Calculator() {
 
-    // @ts-ignore
+    // @ts-expect-error
     const [dosageConfig, setDosageConfig] = useState<DosageConfig>({
         "tank": {
             "volume": 3300,
@@ -41,11 +40,9 @@ export default function Calculator() {
         ]
     } as DosageConfig);
 
-    // @ts-ignore
     const [total, setTotal] = useState<VolumeArea>({volume: 2000, area: 10});
-    // @ts-ignore
     const [rest, setRest] = useState<VolumeArea>({volume: 200, area: 1});
-    // @ts-ignore
+    // @ts-expect-error
     const [delta, setDelta] = useState<VolumeArea>(() => {
         return {
             volume: total.volume - rest.volume,
@@ -92,9 +89,8 @@ export default function Calculator() {
     return (
         <>
             <div>Für fehlende {delta.area} ha einfüllen:</div>
-            <Toolbar className="p-mb-4"></Toolbar>
 
-            <DataTable value={mixtures}>
+            <DataTable value={mixtures} showHeaders={false}>
                 <Column field="medium" header="Name"></Column>
                 <Column field="dosage" header="Dosierung" dataType="numeric" align="right"
                         body={(rowData: MediumMixture) => formatNumber(rowData.dosage, "l/ha")}/>
