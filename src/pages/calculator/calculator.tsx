@@ -108,13 +108,19 @@ export default function Calculator() {
                         body={(rowData: MediumMixture) => formatNumber(rowData.volume, "l")}/>
             </DataTable>
 
-            <VolumeAreaSlider label="Rest" data={rest} minVolume={0} maxVolume={total.volume} onChange={(v) => {
-                reCalc(total, v);
-            }}/>
-            <VolumeAreaSlider label="Total" data={total} minVolume={rest.volume} maxVolume={dosageConfig.tank.volume} onChange={(v) => {
-                reCalc(v, rest);
-            }}/>
 
+            <div style={{
+                background: "#f8f9fa",
+                border: "1px solid #dee2e6"
+            }}>
+                <VolumeAreaSlider label="Rest" data={rest} minVolume={0} maxVolume={total.volume} onChange={(v) => {
+                    reCalc(total, v);
+                }}/>
+                <VolumeAreaSlider label="Total" data={total} minVolume={rest.volume}
+                                  maxVolume={dosageConfig.tank.volume} onChange={(v) => {
+                    reCalc(v, rest);
+                }}/>
+            </div>
         </>
     )
 }
