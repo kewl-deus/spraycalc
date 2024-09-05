@@ -41,3 +41,23 @@ button.small {
 .toolbar-borderless {
     border: none;
 }
+
+.formgroup-inline {
+    display: flex;
+    justify-content: space-between; /* Verteilt die 3 inneren Divs */
+    align-items: center; /* Zentriert vertikal */
+    gap: 10px; /* Optionaler Abstand zwischen den Feldern */
+}
+
+.formgroup-inline .field {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.field {
+    flex: 1; /* Jeder Field-Div bekommt den gleichen Platz */
+}
+
+.field input {
+    width: 100%; /* Das Input-Element füllt den gesamten Platz im Field */
+}

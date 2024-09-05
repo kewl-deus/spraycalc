@@ -17,35 +17,17 @@ export default function Calculator() {
 
     // @ts-expect-error
     const [dosageConfig, setDosageConfig] = useState<DosageConfig>({
-        "tank": {
-            "volume": 3300,
-            "area": 280
+        tank: {
+            volume: 3300,
+            area: 280
         },
-        "dosages": [
-            {
-                "medium": "Mittel 1",
-                "dosage": 1
-            },
-            {
-                "medium": "Mittel 2",
-                "dosage": 2
-            },
-            {
-                "medium": "Mittel 3",
-                "dosage": 3
-            },
-            {
-                "medium": "Mittel 4",
-                "dosage": 4
-            },
-            {
-                "medium": "Mittel 5",
-                "dosage": 5
-            },
-            {
-                "medium": "Mittel 6",
-                "dosage": 6
-            }
+        dosages: [
+            { medium: "Mittel 1", dosage: 1 },
+            { medium: "Mittel 2", dosage: 2 },
+            { medium: "Mittel 3", dosage: 3 },
+            { medium: "Mittel 4", dosage: 4 },
+            { medium: "Mittel 5", dosage: 5 },
+            { medium: "Mittel 6", dosage: 6 }
         ]
     } as DosageConfig);
 
