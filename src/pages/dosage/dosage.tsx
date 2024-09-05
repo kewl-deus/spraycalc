@@ -14,7 +14,7 @@ export default function DosagePage() {
     );
 
     const centerContent = (
-        <div>Einstellungen</div>
+        <div>Dosierung</div>
     );
 
     const endContent = (
@@ -30,7 +30,7 @@ export default function DosagePage() {
     return (
         <>
             <Toolbar start={startContent} center={centerContent} end={endContent}/>
-            <h5>Dosage Config</h5>
+            <h5>Dosierung</h5>
             <p>TODO</p>
         </>
     );

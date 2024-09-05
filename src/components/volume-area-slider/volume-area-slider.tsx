@@ -22,7 +22,7 @@ export default function VolumeAreaSlider(props: VolumeAreaSliderProps) {
             <div className="mt-1">{props.label}: {props.data.volume} l &rarr; {props.data.area} ha</div>
 
             <div className="flex align-items-center mb-1">
-                <div className="flex-grow-1 mr-2">
+                <div className="flex-grow-1 mr-3">
                     <Slider
                         value={props.data.volume}
                         min={props.minVolume}

@@ -97,8 +97,10 @@ export default function Calculator() {
 
     return (
         <>
-            <Toolbar start={startContent} center={centerContent} end={endContent}/>
-            <div>Für fehlende {delta.area} ha einfüllen:</div>
+            <div>
+                <Toolbar start={startContent} center={centerContent} end={endContent} className="toolbar-borderless"/>
+            </div>
+            <div className="mt-2 mb-2">Für fehlende {delta.area} ha einfüllen:</div>
 
             <DataTable value={mixtures} showHeaders={false}>
                 <Column field="medium" header="Name"></Column>
@@ -109,17 +111,16 @@ export default function Calculator() {
             </DataTable>
 
 
-            <div style={{
-                background: "#f8f9fa",
-                border: "1px solid #dee2e6"
-            }}>
-                <VolumeAreaSlider label="Rest" data={rest} minVolume={0} maxVolume={total.volume} onChange={(v) => {
-                    reCalc(total, v);
-                }}/>
-                <VolumeAreaSlider label="Total" data={total} minVolume={rest.volume}
-                                  maxVolume={dosageConfig.tank.volume} onChange={(v) => {
-                    reCalc(v, rest);
-                }}/>
+            <div className="footer">
+                <div>
+                    <VolumeAreaSlider label="Rest" data={rest} minVolume={0} maxVolume={total.volume} onChange={(v) => {
+                        reCalc(total, v);
+                    }}/>
+                    <VolumeAreaSlider label="Total" data={total} minVolume={rest.volume}
+                                      maxVolume={dosageConfig.tank.volume} onChange={(v) => {
+                        reCalc(v, rest);
+                    }}/>
+                </div>
             </div>
         </>
     )

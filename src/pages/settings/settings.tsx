@@ -20,7 +20,7 @@ export default function Settings() {
     return (
         <>
             <Toolbar start={startContent} center={centerContent}/>
-            <h5>Settings</h5>
+            <h5>Einstellungen</h5>
             <p>TODO</p>
         </>
     );
