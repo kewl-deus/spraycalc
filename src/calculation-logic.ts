@@ -21,10 +21,11 @@ export function calcMixtures(total: VolumeArea, rest: VolumeArea, dosages: Mediu
             return mixture;
         }
     );
+    const deltaDosage = delta.volume / delta.area;
     const water: MediumMixture = {
         medium: "Wasser",
-        dosage: rest.volume - sumMediumDosages,
-        volume: delta.volume - sumMediumVolumes
+        dosage: deltaDosage - sumMediumDosages,
+        volume: deltaDosage * delta.area
     }
     return [water, ...newMixtures];
 }

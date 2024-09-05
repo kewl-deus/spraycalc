@@ -1,10 +1,19 @@
 import {DataTable} from "primereact/datatable";
 import {Column} from "primereact/column";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {DosageConfig, MediumMixture, VolumeArea} from "../../types";
 import VolumeAreaSlider from "../../components/volume-area-slider/volume-area-slider.tsx";
+import {calcMixtures} from "../../calculation-logic.ts";
+import {Button} from "primereact/button";
+import {Link} from "react-router-dom";
+import {Toolbar} from "primereact/toolbar";
 
 export default function Calculator() {
+
+    const numberFormat = new Intl.NumberFormat('de-DE', {
+        minimumFractionDigits: 3,
+        maximumFractionDigits: 3
+    });
 
     // @ts-expect-error
     const [dosageConfig, setDosageConfig] = useState<DosageConfig>({
@@ -58,36 +67,42 @@ export default function Calculator() {
     }, [delta])
 
     function reCalc(total: VolumeArea, rest: VolumeArea) {
-        //console.log("reCalc", total, rest);
         setTotal(total);
         setRest(rest);
-        let sumMediumDosages: number = 0;
-        let sumMediumVolumes: number = 0;
-        const newMixtures = dosageConfig.dosages.map(dosage => {
-                const mixture: MediumMixture = {
-                    ...dosage,
-                    volume: dosage.dosage * delta.area
-                };
-                sumMediumDosages += mixture.dosage;
-                sumMediumVolumes += mixture.volume;
-                return mixture;
-            }
-        );
-        const water: MediumMixture = {
-            medium: "Wasser",
-            dosage: rest.volume - sumMediumDosages,
-            volume: delta.volume - sumMediumVolumes
-        }
-        //console.log("mixtures", mixtures);
-        setMixtures([water, ...newMixtures]);
+        const newMixtures = calcMixtures(total, rest, dosageConfig.dosages)
+        setMixtures(newMixtures);
     }
 
     function formatNumber(value: number, unit: string): string {
-        return value !== null ? `${value} ${unit}` : 'N/A';
+        return value !== null ? numberFormat.format(value) + ' ' + unit : 'N/A';
     }
+
+    const startContent = (
+        <React.Fragment>
+            <Button icon="pi pi-lock"/>
+        </React.Fragment>
+    );
+
+    const centerContent = (
+        <div>Spray Calc</div>
+    );
+
+    const endContent = (
+        <React.Fragment>
+            <Link to="/dosage">
+                <span>Dosierung</span>
+            </Link>
+            <Link to="/settings">
+                <button type="button" className="p-link layout-topbar-button">
+                    <i className="pi pi-cog"></i>
+                </button>
+            </Link>
+        </React.Fragment>
+    );
 
     return (
         <>
+            <Toolbar start={startContent} center={centerContent} end={endContent}/>
             <div>Für fehlende {delta.area} ha einfüllen:</div>
 
             <DataTable value={mixtures} showHeaders={false}>

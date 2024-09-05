@@ -1,52 +1,57 @@
 import './App.css'
 import Calculator from "./pages/calculator/calculator.tsx";
-import {Toolbar} from "primereact/toolbar";
-import React from "react";
-import {IconField} from "primereact/iconfield";
-import {InputIcon} from "primereact/inputicon";
-import {InputText} from "primereact/inputtext";
-import {Button} from "primereact/button";
-import {SplitButton} from "primereact/splitbutton";
+import {createBrowserRouter, createRoutesFromElements, Navigate, Route, RouterProvider} from "react-router-dom";
+import Settings from "./pages/settings/settings.tsx";
+import DosagePage from "./pages/dosage/dosage.tsx";
 
 function App() {
 
-    const items = [
-        {
-            label: 'Update',
-            icon: 'pi pi-refresh'
-        },
-        {
-            label: 'Delete',
-            icon: 'pi pi-times'
-        }
-    ];
+    const routes = createRoutesFromElements(
+        <Route>
+            <Route
+                path="/calculator"
+                element={
+                    <>
+                        <Calculator />
+                    </>
+                }
+            />
 
-    const startContent = (
-        <React.Fragment>
-            <Button icon="pi pi-plus" className="mr-2"/>
-            <Button icon="pi pi-print" className="mr-2"/>
-            <Button icon="pi pi-upload"/>
-        </React.Fragment>
+            <Route
+                path="/calculator"
+                element={
+                    <>
+                        <Calculator />
+                    </>
+                }
+            />
+            <Route
+                path="/dosage"
+                element={
+                    <>
+                        <DosagePage />
+                    </>
+                }
+            />
+            <Route
+                path="/settings"
+                element={
+                    <>
+                        <Settings />
+                    </>
+                }
+            />
+
+            {/* Universal routes */}
+            <Route index element={<Navigate to="/calculator" replace />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+        </Route>
     );
 
-    const centerContent = (
-        <IconField iconPosition="left">
-            <InputIcon className="pi pi-search"/>
-            <InputText placeholder="Search"/>
-        </IconField>
-    );
-
-    const endContent = (
-        <React.Fragment>
-            <SplitButton label="Save" model={items} icon="pi pi-check"></SplitButton>
-        </React.Fragment>
-    );
+    const router = createBrowserRouter(routes);
 
     return (
-        <>
-            <Toolbar start={startContent} center={centerContent} end={endContent}/>
-            <Calculator/>
-        </>
+        <RouterProvider router={router} fallbackElement={<p>Initial Load...</p>} />
     )
 }
 
