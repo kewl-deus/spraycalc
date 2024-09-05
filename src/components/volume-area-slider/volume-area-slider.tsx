@@ -1,5 +1,4 @@
 import {Slider} from "primereact/slider";
-import {ButtonGroup} from "primereact/buttongroup";
 import {Button} from "primereact/button";
 import {VolumeArea} from "../../types";
 
@@ -20,7 +19,7 @@ export default function VolumeAreaSlider(props: VolumeAreaSliderProps) {
 
     return (
         <>
-            <div className="mt-1">{props.label}: {props.data.volume} l {"->"} {props.data.area} ha</div>
+            <div className="mt-1">{props.label}: {props.data.volume} l &rarr; {props.data.area} ha</div>
 
             <div className="flex align-items-center mb-1">
                 <div className="flex-grow-1 mr-2">
@@ -37,7 +36,7 @@ export default function VolumeAreaSlider(props: VolumeAreaSliderProps) {
                 <Button
                     icon="pi pi-minus"
                     severity="danger"
-                    className="mr-1"
+                    className="mr-1 small"
                     size="small"
                     onClick={() => {
                         addVolume(-1);
@@ -46,7 +45,7 @@ export default function VolumeAreaSlider(props: VolumeAreaSliderProps) {
                 <Button
                     icon="pi pi-plus"
                     severity="success"
-                    className="mr-1"
+                    className="mr-1 small"
                     size="small"
                     onClick={() => {
                         addVolume(1);
