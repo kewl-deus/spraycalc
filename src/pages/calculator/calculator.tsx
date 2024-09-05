@@ -92,11 +92,6 @@ export default function Calculator() {
             <Link to="/dosage">
                 <span>Dosierung</span>
             </Link>
-            <Link to="/settings">
-                <button type="button" className="p-link layout-topbar-button">
-                    <i className="pi pi-cog"></i>
-                </button>
-            </Link>
         </React.Fragment>
     );
 
