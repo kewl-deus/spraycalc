@@ -1,5 +1,6 @@
 import {useEffect} from "react";
 
+// @ts-ignore
 export function usePersistedState(name, state, stateUpdater, defaultValue) {
     useEffect(() => {
         const persistedState = window.localStorage.getItem(name);
