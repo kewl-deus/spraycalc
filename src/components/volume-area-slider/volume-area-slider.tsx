@@ -1,6 +1,7 @@
 import {Slider} from "primereact/slider";
 import {Button} from "primereact/button";
 import {VolumeArea} from "../../types";
+import {formatNumber} from "../../utils.ts";
 
 export interface VolumeAreaSliderProps {
     label: string;
@@ -20,7 +21,7 @@ export default function VolumeAreaSlider(props: VolumeAreaSliderProps) {
 
     return (
         <>
-            <div className="mt-1">{props.label}: {props.data.volume} l &rarr; {props.data.area} ha</div>
+            <div className="mt-1">{props.label}: {formatNumber(props.data.volume, "l")} &rarr; {formatNumber(props.data.area, "ha")}</div>
 
             <div className="flex align-items-center mb-1">
                 <div className="flex-grow-1 mr-3">

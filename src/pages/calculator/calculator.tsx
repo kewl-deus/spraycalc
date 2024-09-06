@@ -7,13 +7,9 @@ import {calcMixtures} from "../../calculation-logic.ts";
 import {Button} from "primereact/button";
 import {Link} from "react-router-dom";
 import {Toolbar} from "primereact/toolbar";
+import {formatNumber} from "../../utils.ts";
 
 export default function Calculator() {
-
-    const numberFormat = new Intl.NumberFormat('de-DE', {
-        minimumFractionDigits: 3,
-        maximumFractionDigits: 3
-    });
 
     // @ts-expect-error
     const [dosageConfig, setDosageConfig] = useState<DosageConfig>({
@@ -49,14 +45,11 @@ export default function Calculator() {
     }, [delta])
 
     function reCalc(total: VolumeArea, rest: VolumeArea) {
+        const updRest = {...rest, area: (rest.volume / total.volume) * total.area}
         setTotal(total);
-        setRest(rest);
-        const newMixtures = calcMixtures(total, rest, dosageConfig.dosages)
+        setRest(updRest);
+        const newMixtures = calcMixtures(total, updRest, dosageConfig.dosages)
         setMixtures(newMixtures);
-    }
-
-    function formatNumber(value: number, unit: string): string {
-        return value !== null ? numberFormat.format(value) + ' ' + unit : 'N/A';
     }
 
     function getLockIcon() {
