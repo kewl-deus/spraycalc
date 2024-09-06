@@ -4,6 +4,7 @@ import {Link} from "react-router-dom";
 import {DosageConfig} from "../types";
 import {InputText} from "primereact/inputtext";
 import {InputNumber, InputNumberValueChangeEvent} from "primereact/inputnumber";
+import {Button} from "primereact/button";
 
 export default function DosagePage() {
 
@@ -33,6 +34,12 @@ export default function DosagePage() {
     );
 
 
+    const footerStartContent = (
+        <React.Fragment>
+            <Button icon="pi pi-trash" onClick={() => console.log("Delete all")}/>
+        </React.Fragment>
+    );
+
     function updateMediumDosage(index: number, field: string, value: string | number) {
         const updatedDosages = [...dosageConfig.dosages];
         updatedDosages[index] = {...updatedDosages[index], [field]: value};
@@ -57,7 +64,7 @@ export default function DosagePage() {
             <Toolbar start={startContent} center={centerContent} className="toolbar-borderless"/>
 
             {/* Scrollbarer Inhalt */}
-            <div className="flex-grow-1" style={{ marginTop: '60px', marginBottom: '60px', overflowY: 'auto', padding: '1rem' }}>
+            <div className="flex-grow-1" style={{overflowY: 'auto'}}>
                 <div className="mt-2">
                     <div className="formgroup-inline">
                         <div style={{
@@ -146,21 +153,10 @@ export default function DosagePage() {
                 </div>
             </div>
 
-            {/* Footer */}
-            <footer style={{
-                position: 'fixed',
-                bottom: 0,
-                left: 0,
-                width: '100%',
-                backgroundColor: '#673ab8',
-                color: '#fff',
-                padding: '1rem',
-                textAlign: 'center',
-                zIndex: 1000,
-                borderTop: '1px solid #ccc'
-            }}>
-                Footer-Inhalt hier (z.B. Buttons für neue E-Mail)
+            <footer className="footer" style={{padding: '0'}}>
+                <Toolbar start={footerStartContent} className="toolbar-borderless"/>
             </footer>
+
         </div>
     );
 }

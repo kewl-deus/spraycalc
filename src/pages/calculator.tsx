@@ -28,8 +28,8 @@ export default function Calculator() {
     } as DosageConfig);
 
     const [locked, setLocked] = useState(false);
-    const [total, setTotal] = useState<VolumeArea>({volume: 2000, area: 10});
-    const [rest, setRest] = useState<VolumeArea>({volume: 200, area: 1});
+    const [total, setTotal] = useState<VolumeArea>(dosageConfig.tank);
+    const [rest, setRest] = useState<VolumeArea>({volume: 0, area: 0});
     const [mixtures, setMixtures] = useState<MediumMixture[]>([]);
 
     useEffect(() => {

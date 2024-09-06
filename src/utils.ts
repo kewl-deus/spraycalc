@@ -1,4 +1,4 @@
-import {useEffect} from "react";
+import {Dispatch, SetStateAction, useEffect} from "react";
 
 const numberFormat = new Intl.NumberFormat('de-DE', {
     minimumFractionDigits: 3,
@@ -9,8 +9,9 @@ export function formatNumber(value: number, unit: string): string {
     return value !== null ? numberFormat.format(value) + ' ' + unit : 'N/A';
 }
 
-// @ts-ignore
-export function usePersistedState(name, state, stateUpdater, defaultValue) {
+export function usePersistedState<S>(name: string, state: S | (() => S),
+                                     stateUpdater: Dispatch<SetStateAction<S>>,
+                                     defaultValue: (() => S)) {
     useEffect(() => {
         const persistedState = window.localStorage.getItem(name);
 
