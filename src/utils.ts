@@ -9,16 +9,13 @@ export function formatNumber(value: number, unit: string): string {
     return value !== null ? numberFormat.format(value) + ' ' + unit : 'N/A';
 }
 
-export function usePersistedState<S>(name: string, state: S | (() => S),
-                                     stateUpdater: Dispatch<SetStateAction<S>>,
-                                     defaultValue: (() => S)) {
+export function usePersistence<S>(name: string, state: S | (() => S),
+                                  stateUpdater: Dispatch<SetStateAction<S>>) {
     useEffect(() => {
         const persistedState = window.localStorage.getItem(name);
 
         if (persistedState) {
             stateUpdater(JSON.parse(persistedState));
-        } else if (defaultValue) {
-            stateUpdater(defaultValue());
         }
     }, []);
 

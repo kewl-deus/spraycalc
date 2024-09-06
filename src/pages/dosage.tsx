@@ -5,27 +5,18 @@ import {DosageConfig} from "../types";
 import {InputText} from "primereact/inputtext";
 import {InputNumber, InputNumberValueChangeEvent} from "primereact/inputnumber";
 import {Button} from "primereact/button";
+import {defaultDosageConfig} from "../defaults.ts";
 
 export default function DosagePage() {
 
-    const [dosageConfig, setDosageConfig] = useState<DosageConfig>({
-        tank: {
-            volume: 3300,
-            area: 280
-        },
-        dosages: [
-            {medium: "Mittel 1", dosage: 1},
-            {medium: "Mittel 2", dosage: 2},
-            {medium: "Mittel 3", dosage: 3},
-            {medium: "Mittel 4", dosage: 4},
-            {medium: "Mittel 5", dosage: 5},
-            {medium: "Mittel 6", dosage: 6}
-        ]
-    } as DosageConfig);
+    const [dosageConfig, setDosageConfig] = useState<DosageConfig>(defaultDosageConfig);
 
     const startContent = (
         <React.Fragment>
-            <Link to="/calculator" className="p-button pi pi-calculator topbar-link-button"/>
+            <Link to="/calculator" className="p-button pi pi-calculator topbar-link-button"
+                  onClick={() => {
+                      console.log("dosageConfig", dosageConfig);
+                  }}/>
         </React.Fragment>
     );
 
@@ -33,19 +24,21 @@ export default function DosagePage() {
         <div>Dosierung</div>
     );
 
-
     const footerStartContent = (
         <React.Fragment>
             <Button icon="pi pi-trash" onClick={() => console.log("Delete all")}/>
         </React.Fragment>
     );
 
-    function updateMediumDosage(index: number, field: string, value: string | number) {
-        const updatedDosages = [...dosageConfig.dosages];
-        updatedDosages[index] = {...updatedDosages[index], [field]: value};
-        setDosageConfig({...dosageConfig, dosages: updatedDosages});
-    }
 
+    function updateMediumDosage(index: number, field: string, value: string | number) {
+        console.log("updateMediumDosage", index, field, value);
+        setDosageConfig((prevConfig) => {
+            const updatedDosages = [...prevConfig.dosages];
+            updatedDosages[index] = {...updatedDosages[index], [field]: value};
+            return {...prevConfig, dosages: updatedDosages};
+        });
+    }
 
     interface UpdateTankParams {
         volume?: number;
@@ -114,7 +107,7 @@ export default function DosagePage() {
 
                 <div className="mt-2">
                     {dosageConfig.dosages.map((dosage, index) => (
-                        <div className="formgroup-inline" key={dosage.medium}>
+                        <div className="formgroup-inline">
                             <div className="field">
                                 <label htmlFor={"name" + index} className="p-sr-only">
                                     Medium
@@ -123,10 +116,8 @@ export default function DosagePage() {
                                     id={"name" + index}
                                     type="text"
                                     placeholder={"Mittel " + (index + 1)}
-                                    value={dosage.medium}
-                                    onChange={(e) =>
-                                        updateMediumDosage(index, "medium", e.target.value)
-                                    }
+                                    value={dosageConfig.dosages[index].medium}
+                                    onChange={(e) => updateMediumDosage(index, "medium", e.target.value)}
                                 />
                             </div>
                             <div className="field">
@@ -135,7 +126,7 @@ export default function DosagePage() {
                                 </label>
                                 <InputNumber
                                     id={"dosage" + index}
-                                    value={dosage.dosage}
+                                    value={dosageConfig.dosages[index].dosage}
                                     onValueChange={(e: InputNumberValueChangeEvent) => updateMediumDosage(index, "dosage", Number(e.value))}
                                     locale="de-DE"
                                     minFractionDigits={3}
