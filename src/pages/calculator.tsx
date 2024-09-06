@@ -3,7 +3,7 @@ import {Column} from "primereact/column";
 import React, {useEffect, useState} from "react";
 import {DosageConfig, MediumMixture, VolumeArea} from "../types";
 import VolumeAreaSlider from "../components/volume-area-slider.tsx";
-import {calcMixtures} from "../calculation-logic.ts";
+import {calcDelta, calcMixtures} from "../calculation-logic.ts";
 import {Button} from "primereact/button";
 import {Link} from "react-router-dom";
 import {Toolbar} from "primereact/toolbar";
@@ -30,19 +30,11 @@ export default function Calculator() {
     const [locked, setLocked] = useState(false);
     const [total, setTotal] = useState<VolumeArea>({volume: 2000, area: 10});
     const [rest, setRest] = useState<VolumeArea>({volume: 200, area: 1});
-    // @ts-expect-error
-    const [delta, setDelta] = useState<VolumeArea>(() => {
-        return {
-            volume: total.volume - rest.volume,
-            area: total.area - rest.area
-        } as VolumeArea;
-    });
-
     const [mixtures, setMixtures] = useState<MediumMixture[]>([]);
 
     useEffect(() => {
         reCalc(total, rest);
-    }, [delta])
+    }, [])
 
     function reCalc(total: VolumeArea, rest: VolumeArea) {
         const updRest = {...rest, area: (rest.volume / total.volume) * total.area}
@@ -68,7 +60,7 @@ export default function Calculator() {
 
     const endContent = (
         <React.Fragment>
-            <Link to="/dosage" className="p-button pi pi-cog topbar-link-button" />
+            <Link to="/dosage" className="p-button pi pi-cog topbar-link-button"/>
         </React.Fragment>
     );
 
@@ -77,7 +69,7 @@ export default function Calculator() {
             <div>
                 <Toolbar start={startContent} center={centerContent} end={endContent} className="toolbar-borderless"/>
             </div>
-            <div className="mt-2 mb-2">Für fehlende {delta.area} ha einfüllen:</div>
+            <div className="mt-2 mb-2">Für fehlende {formatNumber(calcDelta(total, rest).area, "ha")} einfüllen:</div>
 
             <DataTable value={mixtures} showHeaders={false}>
                 <Column field="medium" header="Name"></Column>

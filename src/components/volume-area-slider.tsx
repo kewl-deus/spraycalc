@@ -1,4 +1,4 @@
-import {Slider} from "primereact/slider";
+import {Slider, SliderChangeEvent} from "primereact/slider";
 import {Button} from "primereact/button";
 import {VolumeArea} from "../types";
 import {formatNumber} from "../utils.ts";
@@ -29,7 +29,7 @@ export default function VolumeAreaSlider(props: VolumeAreaSliderProps) {
                         value={props.data.volume}
                         min={props.minVolume || 0}
                         max={props.maxVolume || 100}
-                        onChange={(e) => {
+                        onChange={(e: SliderChangeEvent) => {
                             props.onChange({...props.data, volume: e.value as number});
                         }}
                         className="ml-1 w-full"

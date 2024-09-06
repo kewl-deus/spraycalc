@@ -52,95 +52,115 @@ export default function DosagePage() {
 
 
     return (
-        <>
-            <Toolbar start={startContent} center={centerContent}/>
+        <div className="flex flex-column" style={{minHeight: '100vh'}}>
+            {/* Topbar */}
+            <Toolbar start={startContent} center={centerContent} className="toolbar-borderless"/>
 
-            <div className="mt-2">
-                <div className="formgroup-inline">
-                    <div style={{
-                        marginBottom: "1rem"
-                    }}>Tank
-                    </div>
-                    <div className="field">
-                        <label htmlFor="tank-volume" className="p-sr-only">
-                            Tank
-                        </label>
-                        <InputNumber
-                            id="tank-volume"
-                            value={dosageConfig.tank.volume}
-                            onValueChange={(e: InputNumberValueChangeEvent) => updateTank({volume: Number(e.value)})}
-                            locale="de-DE"
-                            showButtons={false} buttonLayout="horizontal" step={50}
-                            incrementButtonClassName="p-button-success" incrementButtonIcon="pi pi-plus"
-                            decrementButtonIcon="pi pi-minus" decrementButtonClassName="p-button-danger"
-                            min={0}
-                            suffix=" l"
-                            className="input-number-right"
-                        />
-                    </div>
-                    <div style={{
-                        marginBottom: "1rem"
-                    }}>Fläche
-                    </div>
-                    <div className="field">
-                        <label htmlFor="tank-area" className="p-sr-only">
-                            Tank
-                        </label>
-                        <InputNumber
-                            id="tank-area"
-                            value={dosageConfig.tank.area}
-                            onValueChange={(e: InputNumberValueChangeEvent) => updateTank({area: Number(e.value)})}
-                            locale="de-DE"
-                            showButtons={false} buttonLayout="horizontal" step={5}
-                            incrementButtonClassName="p-button-success" incrementButtonIcon="pi pi-plus"
-                            decrementButtonIcon="pi pi-minus" decrementButtonClassName="p-button-danger"
-                            min={0}
-                            suffix=" ha"
-                            className="input-number-right"
-                        />
-                    </div>
-                </div>
-            </div>
-
-            <div className="mt-2">
-                {dosageConfig.dosages.map((dosage, index) => (
-                    <div className="formgroup-inline" key={dosage.medium}>
-                        <div className="field">
-                            <label htmlFor={"name" + index} className="p-sr-only">
-                                Medium
-                            </label>
-                            <InputText
-                                id={"name" + index}
-                                type="text"
-                                placeholder={"Mittel " + (index + 1)}
-                                value={dosage.medium}
-                                onChange={(e) =>
-                                    updateMediumDosage(index, "medium", e.target.value)
-                                }
-                            />
+            {/* Scrollbarer Inhalt */}
+            <div className="flex-grow-1" style={{ marginTop: '60px', marginBottom: '60px', overflowY: 'auto', padding: '1rem' }}>
+                <div className="mt-2">
+                    <div className="formgroup-inline">
+                        <div style={{
+                            marginBottom: "1rem"
+                        }}>Tank
                         </div>
                         <div className="field">
-                            <label htmlFor={"dosage" + index} className="p-sr-only">
-                                Dosage
+                            <label htmlFor="tank-volume" className="p-sr-only">
+                                Tank
                             </label>
                             <InputNumber
-                                id={"dosage" + index}
-                                value={dosage.dosage}
-                                onValueChange={(e: InputNumberValueChangeEvent) => updateMediumDosage(index, "dosage", Number(e.value))}
+                                id="tank-volume"
+                                value={dosageConfig.tank.volume}
+                                onValueChange={(e: InputNumberValueChangeEvent) => updateTank({volume: Number(e.value)})}
                                 locale="de-DE"
-                                minFractionDigits={3}
-                                showButtons buttonLayout="horizontal" step={0.1}
+                                showButtons={false} buttonLayout="horizontal" step={50}
                                 incrementButtonClassName="p-button-success" incrementButtonIcon="pi pi-plus"
                                 decrementButtonIcon="pi pi-minus" decrementButtonClassName="p-button-danger"
-                                mode="decimal"
                                 min={0}
-                                suffix=" l/ha"
+                                suffix=" l"
+                                className="input-number-right"
+                            />
+                        </div>
+                        <div style={{
+                            marginBottom: "1rem"
+                        }}>Fläche
+                        </div>
+                        <div className="field">
+                            <label htmlFor="tank-area" className="p-sr-only">
+                                Tank
+                            </label>
+                            <InputNumber
+                                id="tank-area"
+                                value={dosageConfig.tank.area}
+                                onValueChange={(e: InputNumberValueChangeEvent) => updateTank({area: Number(e.value)})}
+                                locale="de-DE"
+                                showButtons={false} buttonLayout="horizontal" step={5}
+                                incrementButtonClassName="p-button-success" incrementButtonIcon="pi pi-plus"
+                                decrementButtonIcon="pi pi-minus" decrementButtonClassName="p-button-danger"
+                                min={0}
+                                suffix=" ha"
                                 className="input-number-right"
                             />
                         </div>
                     </div>
-                ))}
+                </div>
+
+                <div className="mt-2">
+                    {dosageConfig.dosages.map((dosage, index) => (
+                        <div className="formgroup-inline" key={dosage.medium}>
+                            <div className="field">
+                                <label htmlFor={"name" + index} className="p-sr-only">
+                                    Medium
+                                </label>
+                                <InputText
+                                    id={"name" + index}
+                                    type="text"
+                                    placeholder={"Mittel " + (index + 1)}
+                                    value={dosage.medium}
+                                    onChange={(e) =>
+                                        updateMediumDosage(index, "medium", e.target.value)
+                                    }
+                                />
+                            </div>
+                            <div className="field">
+                                <label htmlFor={"dosage" + index} className="p-sr-only">
+                                    Dosage
+                                </label>
+                                <InputNumber
+                                    id={"dosage" + index}
+                                    value={dosage.dosage}
+                                    onValueChange={(e: InputNumberValueChangeEvent) => updateMediumDosage(index, "dosage", Number(e.value))}
+                                    locale="de-DE"
+                                    minFractionDigits={3}
+                                    showButtons buttonLayout="horizontal" step={0.1}
+                                    incrementButtonClassName="p-button-success" incrementButtonIcon="pi pi-plus"
+                                    decrementButtonIcon="pi pi-minus" decrementButtonClassName="p-button-danger"
+                                    mode="decimal"
+                                    min={0}
+                                    suffix=" l/ha"
+                                    className="input-number-right"
+                                />
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
-        </>
+
+            {/* Footer */}
+            <footer style={{
+                position: 'fixed',
+                bottom: 0,
+                left: 0,
+                width: '100%',
+                backgroundColor: '#673ab8',
+                color: '#fff',
+                padding: '1rem',
+                textAlign: 'center',
+                zIndex: 1000,
+                borderTop: '1px solid #ccc'
+            }}>
+                Footer-Inhalt hier (z.B. Buttons für neue E-Mail)
+            </footer>
+        </div>
     );
 }

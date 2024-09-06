@@ -10,14 +10,12 @@ export function calcDelta(total: VolumeArea, rest: VolumeArea): VolumeArea {
 export function calcMixtures(total: VolumeArea, rest: VolumeArea, dosages: MediumDosage[]): MediumMixture[] {
     const delta = calcDelta(total, rest);
     let sumMediumDosages: number = 0;
-    let sumMediumVolumes: number = 0;
     const newMixtures = dosages.map(dosage => {
             const mixture: MediumMixture = {
                 ...dosage,
                 volume: dosage.dosage * delta.area
             };
             sumMediumDosages += mixture.dosage;
-            sumMediumVolumes += mixture.volume;
             return mixture;
         }
     );
