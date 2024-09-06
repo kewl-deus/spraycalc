@@ -1,8 +1,8 @@
 import './App.css'
-import Calculator from "./pages/calculator/calculator.tsx";
+import Calculator from "./pages/calculator.tsx";
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
-import Settings from "./pages/settings/settings.tsx";
-import DosagePage from "./pages/dosage/dosage.tsx";
+import Settings from "./pages/settings.tsx";
+import DosagePage from "./pages/dosage.tsx";
 
 function App() {
 

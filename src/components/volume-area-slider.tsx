@@ -1,7 +1,7 @@
 import {Slider} from "primereact/slider";
 import {Button} from "primereact/button";
-import {VolumeArea} from "../../types";
-import {formatNumber} from "../../utils.ts";
+import {VolumeArea} from "../types";
+import {formatNumber} from "../utils.ts";
 
 export interface VolumeAreaSliderProps {
     label: string;

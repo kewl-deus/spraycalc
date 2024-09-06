@@ -1,7 +1,7 @@
 import {Toolbar} from "primereact/toolbar";
 import React, {useState} from "react";
 import {Link} from "react-router-dom";
-import {DosageConfig} from "../../types";
+import {DosageConfig} from "../types";
 import {InputText} from "primereact/inputtext";
 import {InputNumber, InputNumberValueChangeEvent} from "primereact/inputnumber";
 

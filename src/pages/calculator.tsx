@@ -1,13 +1,13 @@
 import {DataTable} from "primereact/datatable";
 import {Column} from "primereact/column";
 import React, {useEffect, useState} from "react";
-import {DosageConfig, MediumMixture, VolumeArea} from "../../types";
-import VolumeAreaSlider from "../../components/volume-area-slider/volume-area-slider.tsx";
-import {calcMixtures} from "../../calculation-logic.ts";
+import {DosageConfig, MediumMixture, VolumeArea} from "../types";
+import VolumeAreaSlider from "../components/volume-area-slider.tsx";
+import {calcMixtures} from "../calculation-logic.ts";
 import {Button} from "primereact/button";
 import {Link} from "react-router-dom";
 import {Toolbar} from "primereact/toolbar";
-import {formatNumber} from "../../utils.ts";
+import {formatNumber} from "../utils.ts";
 
 export default function Calculator() {
 
