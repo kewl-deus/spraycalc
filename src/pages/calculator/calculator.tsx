@@ -22,15 +22,16 @@ export default function Calculator() {
             area: 280
         },
         dosages: [
-            { medium: "Mittel 1", dosage: 1 },
-            { medium: "Mittel 2", dosage: 2 },
-            { medium: "Mittel 3", dosage: 3 },
-            { medium: "Mittel 4", dosage: 4 },
-            { medium: "Mittel 5", dosage: 5 },
-            { medium: "Mittel 6", dosage: 6 }
+            {medium: "Mittel 1", dosage: 1},
+            {medium: "Mittel 2", dosage: 2},
+            {medium: "Mittel 3", dosage: 3},
+            {medium: "Mittel 4", dosage: 4},
+            {medium: "Mittel 5", dosage: 5},
+            {medium: "Mittel 6", dosage: 6}
         ]
     } as DosageConfig);
 
+    const [locked, setLocked] = useState(false);
     const [total, setTotal] = useState<VolumeArea>({volume: 2000, area: 10});
     const [rest, setRest] = useState<VolumeArea>({volume: 200, area: 1});
     // @ts-expect-error
@@ -44,7 +45,6 @@ export default function Calculator() {
     const [mixtures, setMixtures] = useState<MediumMixture[]>([]);
 
     useEffect(() => {
-        //console.log("useEffect");
         reCalc(total, rest);
     }, [delta])
 
@@ -59,9 +59,13 @@ export default function Calculator() {
         return value !== null ? numberFormat.format(value) + ' ' + unit : 'N/A';
     }
 
+    function getLockIcon() {
+        return locked ? "pi-lock" : "pi-lock-open";
+    }
+
     const startContent = (
         <React.Fragment>
-            <Button icon="pi pi-lock"/>
+            <Button icon={"pi " + getLockIcon()} onClick={() => setLocked(!locked)}/>
         </React.Fragment>
     );
 
@@ -71,9 +75,7 @@ export default function Calculator() {
 
     const endContent = (
         <React.Fragment>
-            <Link to="/dosage">
-                <span>Dosierung</span>
-            </Link>
+            <Link to="/dosage" className="p-button pi pi-cog topbar-link-button" />
         </React.Fragment>
     );
 
@@ -95,13 +97,18 @@ export default function Calculator() {
 
             <div className="footer">
                 <div>
-                    <VolumeAreaSlider label="Rest" data={rest} minVolume={0} maxVolume={total.volume} onChange={(v) => {
-                        reCalc(total, v);
-                    }}/>
-                    <VolumeAreaSlider label="Total" data={total} minVolume={rest.volume}
-                                      maxVolume={dosageConfig.tank.volume} onChange={(v) => {
-                        reCalc(v, rest);
-                    }}/>
+                    <VolumeAreaSlider label="Rest"
+                                      data={rest}
+                                      minVolume={0}
+                                      maxVolume={total.volume}
+                                      disabled={locked}
+                                      onChange={(v) => reCalc(total, v)}/>
+                    <VolumeAreaSlider label="Total"
+                                      data={total}
+                                      minVolume={rest.volume}
+                                      maxVolume={dosageConfig.tank.volume}
+                                      disabled={locked}
+                                      onChange={(v) => reCalc(v, rest)}/>
                 </div>
             </div>
         </>

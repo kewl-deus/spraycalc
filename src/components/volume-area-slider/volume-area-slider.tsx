@@ -5,8 +5,9 @@ import {VolumeArea} from "../../types";
 export interface VolumeAreaSliderProps {
     label: string;
     data: VolumeArea;
-    minVolume: number;
-    maxVolume: number;
+    minVolume?: number;
+    maxVolume?: number;
+    disabled?: boolean;
     onChange: (value: VolumeArea) => void;
 }
 
@@ -25,12 +26,13 @@ export default function VolumeAreaSlider(props: VolumeAreaSliderProps) {
                 <div className="flex-grow-1 mr-3">
                     <Slider
                         value={props.data.volume}
-                        min={props.minVolume}
-                        max={props.maxVolume}
+                        min={props.minVolume || 0}
+                        max={props.maxVolume || 100}
                         onChange={(e) => {
                             props.onChange({...props.data, volume: e.value as number});
                         }}
                         className="ml-1 w-full"
+                        disabled={props.disabled || false}
                     />
                 </div>
                 <Button
@@ -41,6 +43,7 @@ export default function VolumeAreaSlider(props: VolumeAreaSliderProps) {
                     onClick={() => {
                         addVolume(-1);
                     }}
+                    disabled={props.disabled}
                 />
                 <Button
                     icon="pi pi-plus"
@@ -50,6 +53,7 @@ export default function VolumeAreaSlider(props: VolumeAreaSliderProps) {
                     onClick={() => {
                         addVolume(1);
                     }}
+                    disabled={props.disabled}
                 />
             </div>
         </>

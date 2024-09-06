@@ -1,6 +1,6 @@
 import {useEffect} from "react";
 
-export function usePersist(name, state, stateUpdater, defaultValue) {
+export function usePersistedState(name, state, stateUpdater, defaultValue) {
     useEffect(() => {
         const persistedState = window.localStorage.getItem(name);
 

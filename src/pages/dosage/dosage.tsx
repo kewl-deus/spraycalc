@@ -3,6 +3,7 @@ import React, {useState} from "react";
 import {Link} from "react-router-dom";
 import {DosageConfig} from "../../types";
 import {InputText} from "primereact/inputtext";
+import {InputNumber, InputNumberValueChangeEvent} from "primereact/inputnumber";
 
 export default function DosagePage() {
 
@@ -23,9 +24,7 @@ export default function DosagePage() {
 
     const startContent = (
         <React.Fragment>
-            <Link to="/calculator">
-                <span>Rechner</span>
-            </Link>
+            <Link to="/calculator" className="p-button pi pi-calculator topbar-link-button"/>
         </React.Fragment>
     );
 
@@ -33,25 +32,69 @@ export default function DosagePage() {
         <div>Dosierung</div>
     );
 
-    const endContent = (
-        <React.Fragment>
-            <Link to="/settings">
-                <button type="button" className="p-link layout-topbar-button">
-                    <i className="pi pi-cog"></i>
-                </button>
-            </Link>
-        </React.Fragment>
-    );
 
-    const handleInputChange = (index: number, field: string, value: string | number) => {
+    function updateMediumDosage(index: number, field: string, value: string | number) {
         const updatedDosages = [...dosageConfig.dosages];
         updatedDosages[index] = {...updatedDosages[index], [field]: value};
         setDosageConfig({...dosageConfig, dosages: updatedDosages});
-    };
+    }
+
+
+    interface UpdateTankParams {
+        volume?: number;
+        area?: number;
+    }
+
+    function updateTank({volume, area}: UpdateTankParams) {
+        const updatedTank = {volume: volume || dosageConfig.tank.volume, area: area || dosageConfig.tank.area};
+        setDosageConfig({...dosageConfig, tank: updatedTank});
+    }
+
 
     return (
         <>
-            <Toolbar start={startContent} center={centerContent} end={endContent}/>
+            <Toolbar start={startContent} center={centerContent}/>
+
+            <div className="mt-2">
+                <div className="formgroup-inline">
+                    <div className="field">
+                        <label htmlFor="tank-volume" className="p-sr-only">
+                            Tank
+                        </label>
+                        <InputNumber
+                            id="tank-volume"
+                            value={dosageConfig.tank.volume}
+                            onValueChange={(e: InputNumberValueChangeEvent) => updateTank({volume: Number(e.value)})}
+                            locale="de-DE"
+                            minFractionDigits={3}
+                            showButtons buttonLayout="horizontal" step={0.1}
+                            incrementButtonClassName="p-button-success" incrementButtonIcon="pi pi-plus"
+                            decrementButtonIcon="pi pi-minus" decrementButtonClassName="p-button-danger"
+                            mode="decimal"
+                            min={0}
+                            suffix=" l"
+                            className="input-number-right"
+                        />
+                    </div>
+                    <div className="field">
+                        <label htmlFor="tank-area" className="p-sr-only">
+                            Tank
+                        </label>
+                        <InputNumber
+                            id="tank-area"
+                            value={dosageConfig.tank.area}
+                            onValueChange={(e: InputNumberValueChangeEvent) => updateTank({area: Number(e.value)})}
+                            locale="de-DE"
+                            showButtons buttonLayout="horizontal" step={10}
+                            incrementButtonClassName="p-button-success" incrementButtonIcon="pi pi-plus"
+                            decrementButtonIcon="pi pi-minus" decrementButtonClassName="p-button-danger"
+                            min={0}
+                            suffix=" ha"
+                            className="input-number-right"
+                        />
+                    </div>
+                </div>
+            </div>
 
             <div className="mt-2">
                 {dosageConfig.dosages.map((dosage, index) => (
@@ -66,26 +109,27 @@ export default function DosagePage() {
                                 placeholder={"Mittel " + (index + 1)}
                                 value={dosage.medium}
                                 onChange={(e) =>
-                                    handleInputChange(index, "medium", e.target.value)
+                                    updateMediumDosage(index, "medium", e.target.value)
                                 }
                             />
-                        </div>
-                        <div style={{
-                            marginBottom: "1rem"
-                        }}>l/ha
                         </div>
                         <div className="field">
                             <label htmlFor={"dosage" + index} className="p-sr-only">
                                 Dosage
                             </label>
-                            <InputText
+                            <InputNumber
                                 id={"dosage" + index}
-                                type="number"
-                                placeholder="0"
                                 value={dosage.dosage}
-                                onChange={(e) =>
-                                    handleInputChange(index, "dosage", Number(e.target.value))
-                                }
+                                onValueChange={(e: InputNumberValueChangeEvent) => updateMediumDosage(index, "dosage", Number(e.value))}
+                                locale="de-DE"
+                                minFractionDigits={3}
+                                showButtons buttonLayout="horizontal" step={0.1}
+                                incrementButtonClassName="p-button-success" incrementButtonIcon="pi pi-plus"
+                                decrementButtonIcon="pi pi-minus" decrementButtonClassName="p-button-danger"
+                                mode="decimal"
+                                min={0}
+                                suffix=" l/ha"
+                                className="input-number-right"
                             />
                         </div>
                     </div>

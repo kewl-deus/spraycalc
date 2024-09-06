@@ -61,3 +61,12 @@ button.small {
 .field input {
     width: 100%; /* Das Input-Element füllt den gesamten Platz im Field */
 }
+
+.input-number-right > input {
+    text-align: right;
+}
+
+.topbar-link-button {
+    text-decoration: none;
+    padding: 0.6rem;
+}
