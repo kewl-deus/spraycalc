@@ -57,6 +57,10 @@ export default function DosagePage() {
 
             <div className="mt-2">
                 <div className="formgroup-inline">
+                    <div style={{
+                        marginBottom: "1rem"
+                    }}>Tank
+                    </div>
                     <div className="field">
                         <label htmlFor="tank-volume" className="p-sr-only">
                             Tank
@@ -66,15 +70,17 @@ export default function DosagePage() {
                             value={dosageConfig.tank.volume}
                             onValueChange={(e: InputNumberValueChangeEvent) => updateTank({volume: Number(e.value)})}
                             locale="de-DE"
-                            minFractionDigits={3}
-                            showButtons buttonLayout="horizontal" step={0.1}
+                            showButtons={false} buttonLayout="horizontal" step={50}
                             incrementButtonClassName="p-button-success" incrementButtonIcon="pi pi-plus"
                             decrementButtonIcon="pi pi-minus" decrementButtonClassName="p-button-danger"
-                            mode="decimal"
                             min={0}
                             suffix=" l"
                             className="input-number-right"
                         />
+                    </div>
+                    <div style={{
+                        marginBottom: "1rem"
+                    }}>Fläche
                     </div>
                     <div className="field">
                         <label htmlFor="tank-area" className="p-sr-only">
@@ -85,7 +91,7 @@ export default function DosagePage() {
                             value={dosageConfig.tank.area}
                             onValueChange={(e: InputNumberValueChangeEvent) => updateTank({area: Number(e.value)})}
                             locale="de-DE"
-                            showButtons buttonLayout="horizontal" step={10}
+                            showButtons={false} buttonLayout="horizontal" step={5}
                             incrementButtonClassName="p-button-success" incrementButtonIcon="pi pi-plus"
                             decrementButtonIcon="pi pi-minus" decrementButtonClassName="p-button-danger"
                             min={0}
