@@ -12,12 +12,20 @@ import {defaultDosageConfig} from "../defaults.ts";
 
 export default function Calculator() {
 
-    const [dosageConfig, setDosageConfig] = useState<DosageConfig>(defaultDosageConfig);
+    //@typescript-eslint/no-unused-vars
+    const [dosageConfig] = useState<DosageConfig>(() => {
+        const persistedState = window.localStorage.getItem("dosageConfig");
+        if (persistedState) {
+            return JSON.parse(persistedState) as DosageConfig;
+        }
+        return defaultDosageConfig;
+    });
 
     const [locked, setLocked] = useState(false);
     const [total, setTotal] = useState<VolumeArea>(dosageConfig.tank);
     const [rest, setRest] = useState<VolumeArea>({volume: 0, area: 0});
     const [mixtures, setMixtures] = useState<MediumMixture[]>([]);
+
 
     useEffect(() => {
         reCalc(total, rest);

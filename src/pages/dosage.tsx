@@ -1,5 +1,5 @@
 import {Toolbar} from "primereact/toolbar";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import {DosageConfig} from "../types";
 import {InputText} from "primereact/inputtext";
@@ -9,14 +9,23 @@ import {defaultDosageConfig} from "../defaults.ts";
 
 export default function DosagePage() {
 
-    const [dosageConfig, setDosageConfig] = useState<DosageConfig>(defaultDosageConfig);
+    const [dosageConfig, setDosageConfig] = useState<DosageConfig>(() => {
+        const persistedState = window.localStorage.getItem("dosageConfig");
+        if (persistedState) {
+            //console.log("Reading from LocalStorage", "dosageConfig", persistedState);
+            return JSON.parse(persistedState) as DosageConfig;
+        }
+        return defaultDosageConfig;
+    });
+
+    useEffect(() => {
+        //console.log("Writing to LocalStorage", "dosageConfig", dosageConfig);
+        window.localStorage.setItem("dosageConfig", JSON.stringify(dosageConfig));
+    }, [dosageConfig]);
 
     const startContent = (
         <React.Fragment>
-            <Link to="/calculator" className="p-button pi pi-calculator topbar-link-button"
-                  onClick={() => {
-                      console.log("dosageConfig", dosageConfig);
-                  }}/>
+            <Link to="/calculator" className="p-button pi pi-calculator topbar-link-button"/>
         </React.Fragment>
     );
 
@@ -32,7 +41,7 @@ export default function DosagePage() {
 
 
     function updateMediumDosage(index: number, field: string, value: string | number) {
-        console.log("updateMediumDosage", index, field, value);
+        //console.log("updateMediumDosage", index, field, value);
         setDosageConfig((prevConfig) => {
             const updatedDosages = [...prevConfig.dosages];
             updatedDosages[index] = {...updatedDosages[index], [field]: value};
@@ -106,7 +115,7 @@ export default function DosagePage() {
                 </div>
 
                 <div className="mt-2">
-                    {dosageConfig.dosages.map((dosage, index) => (
+                    {dosageConfig.dosages.map((_dosage, index) => (
                         <div className="formgroup-inline">
                             <div className="field">
                                 <label htmlFor={"name" + index} className="p-sr-only">
