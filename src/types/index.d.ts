@@ -1,40 +1,25 @@
 
+export type Volume = number;  // liter
+export type VolumePerArea = number;  // l/ha
+export type Area = number;  // l/ha
+
 export interface DosageConfig {
-  tank: VolumeArea;
+  tankVolume: Volume;
+  sprayDosage: VolumePerArea;
   dosages: MediumDosage[];
 }
 
-export interface Mixture {
-  total: VolumeArea;
-  rest: VolumeArea;
-  mixtures: MediumMixture[];
-}
-
 export interface MediumDosage {
+  id: number;
   medium: string;
-  dosage: number;
+  dosage: VolumePerArea;
 }
 
 export interface MediumMixture extends MediumDosage{
-  volume: number;
+  volume: Volume;
 }
 
 export interface VolumeArea {
-  volume: number;
-  area: number;
-}
-
-
-export class VolumeAreaImpl implements VolumeArea{
-  volume: number;
-  area: number;
-
-  constructor(volume: number, area: number) {
-    this.volume = volume;
-    this.area = area;
-  }
-
-  calcRatio(): number {
-    return this.volume / this.area;
-  }
+  volume: Volume;
+  area: Area;
 }

@@ -4,5 +4,6 @@ const numberFormat = new Intl.NumberFormat('de-DE', {
 });
 
 export function formatNumber(value: number, unit: string): string {
-    return value !== null ? numberFormat.format(value) + ' ' + unit : 'N/A';
+    const val = (value == null || isNaN(value)) ? 0 : value;
+    return numberFormat.format(val) + ' ' + unit;
 }

@@ -5,7 +5,7 @@ import {DosageConfig} from "../types";
 import {InputText} from "primereact/inputtext";
 import {InputNumber, InputNumberValueChangeEvent} from "primereact/inputnumber";
 import {Button} from "primereact/button";
-import {defaultDosageConfig} from "../defaults.ts";
+import {defaultDosageConfig, appVersion} from "../defaults.ts";
 
 export default function DosagePage() {
 
@@ -35,8 +35,16 @@ export default function DosagePage() {
 
     const footerStartContent = (
         <React.Fragment>
-            <Button icon="pi pi-trash" onClick={() => console.log("Delete all")}/>
+            <Button icon="pi pi-trash" className="p-button-danger" size="small" label="Reset"
+                    onClick={() => {
+                        console.log("Reset");
+                        setDosageConfig(defaultDosageConfig);
+                    }}/>
         </React.Fragment>
+    );
+
+    const footerEndContent = (
+        <div>Version {appVersion}</div>
     );
 
 
@@ -49,16 +57,14 @@ export default function DosagePage() {
         });
     }
 
-    interface UpdateTankParams {
-        volume?: number;
-        area?: number;
+
+    function updateTank(volume: number) {
+        setDosageConfig({...dosageConfig, tankVolume: volume});
     }
 
-    function updateTank({volume, area}: UpdateTankParams) {
-        const updatedTank = {volume: volume || dosageConfig.tank.volume, area: area || dosageConfig.tank.area};
-        setDosageConfig({...dosageConfig, tank: updatedTank});
+    function updateSprayDosage(dosage: number) {
+        setDosageConfig({...dosageConfig, sprayDosage: dosage});
     }
-
 
     return (
         <div className="flex flex-column" style={{minHeight: '100vh'}}>
@@ -79,8 +85,8 @@ export default function DosagePage() {
                             </label>
                             <InputNumber
                                 id="tank-volume"
-                                value={dosageConfig.tank.volume}
-                                onValueChange={(e: InputNumberValueChangeEvent) => updateTank({volume: Number(e.value)})}
+                                value={dosageConfig.tankVolume}
+                                onValueChange={(e: InputNumberValueChangeEvent) => updateTank(Number(e.value))}
                                 locale="de-DE"
                                 showButtons={false} buttonLayout="horizontal" step={50}
                                 incrementButtonClassName="p-button-success" incrementButtonIcon="pi pi-plus"
@@ -92,22 +98,22 @@ export default function DosagePage() {
                         </div>
                         <div style={{
                             marginBottom: "1rem"
-                        }}>Fläche
+                        }}>Gemisch
                         </div>
                         <div className="field">
-                            <label htmlFor="tank-area" className="p-sr-only">
-                                Tank
+                            <label htmlFor="spray-dosage" className="p-sr-only">
+                                Gemisch
                             </label>
                             <InputNumber
-                                id="tank-area"
-                                value={dosageConfig.tank.area}
-                                onValueChange={(e: InputNumberValueChangeEvent) => updateTank({area: Number(e.value)})}
+                                id="spray-dosage"
+                                value={dosageConfig.sprayDosage}
+                                onValueChange={(e: InputNumberValueChangeEvent) => updateSprayDosage(Number(e.value))}
                                 locale="de-DE"
-                                showButtons={false} buttonLayout="horizontal" step={5}
+                                showButtons={false} buttonLayout="horizontal" step={25}
                                 incrementButtonClassName="p-button-success" incrementButtonIcon="pi pi-plus"
                                 decrementButtonIcon="pi pi-minus" decrementButtonClassName="p-button-danger"
                                 min={0}
-                                suffix=" ha"
+                                suffix=" l/ha"
                                 className="input-number-right"
                             />
                         </div>
@@ -129,6 +135,7 @@ export default function DosagePage() {
                                     onChange={(e) => updateMediumDosage(index, "medium", e.target.value)}
                                 />
                             </div>
+                            <div style={{marginBottom: "1rem"}}>l/ha</div>
                             <div className="field">
                                 <label htmlFor={"dosage" + index} className="p-sr-only">
                                     Dosage
@@ -139,22 +146,34 @@ export default function DosagePage() {
                                     onValueChange={(e: InputNumberValueChangeEvent) => updateMediumDosage(index, "dosage", Number(e.value))}
                                     locale="de-DE"
                                     minFractionDigits={3}
-                                    showButtons buttonLayout="horizontal" step={0.1}
+                                    showButtons={false} buttonLayout="horizontal" step={0.1}
                                     incrementButtonClassName="p-button-success" incrementButtonIcon="pi pi-plus"
                                     decrementButtonIcon="pi pi-minus" decrementButtonClassName="p-button-danger"
                                     mode="decimal"
                                     min={0}
-                                    suffix=" l/ha"
                                     className="input-number-right"
                                 />
                             </div>
+                            <div style={{marginBottom: "1rem"}}>
+                                <Button icon="pi pi-trash" size="small"
+                                        className="p-button-danger"
+                                        onClick={() => {
+                                            console.log("Delete", dosageConfig.dosages[index].medium);
+                                            setDosageConfig((prevConfig) => {
+                                                const updatedDosages = [...prevConfig.dosages];
+                                                updatedDosages[index] = defaultDosageConfig.dosages[index];
+                                                return {...prevConfig, dosages: updatedDosages};
+                                            });
+                                        }}/>
+                            </div>
+
                         </div>
                     ))}
                 </div>
             </div>
 
             <footer className="footer" style={{padding: '0'}}>
-                <Toolbar start={footerStartContent} className="toolbar-borderless"/>
+                <Toolbar start={footerStartContent} end={footerEndContent} className="toolbar-borderless"/>
             </footer>
 
         </div>

@@ -1,9 +1,9 @@
 import {DataTable} from "primereact/datatable";
 import {Column} from "primereact/column";
 import React, {useEffect, useState} from "react";
-import {DosageConfig, MediumMixture, VolumeArea} from "../types";
+import {DosageConfig, MediumMixture} from "../types";
 import VolumeAreaSlider from "../components/volume-area-slider.tsx";
-import {calcDelta, calcMixtures} from "../calculation-logic.ts";
+import {calcArea, calcMixtures} from "../calculation-logic.ts";
 import {Button} from "primereact/button";
 import {Link} from "react-router-dom";
 import {Toolbar} from "primereact/toolbar";
@@ -22,8 +22,8 @@ export default function Calculator() {
     });
 
     const [locked, setLocked] = useState(false);
-    const [total, setTotal] = useState<VolumeArea>(dosageConfig.tank);
-    const [rest, setRest] = useState<VolumeArea>({volume: 0, area: 0});
+    const [total, setTotal] = useState<number>(dosageConfig.tankVolume);
+    const [rest, setRest] = useState<number>(0);
     const [mixtures, setMixtures] = useState<MediumMixture[]>([]);
 
 
@@ -31,11 +31,17 @@ export default function Calculator() {
         reCalc(total, rest);
     }, [])
 
-    function reCalc(total: VolumeArea, rest: VolumeArea) {
-        const updRest = {...rest, area: (rest.volume / total.volume) * total.area}
+    function reCalc(total: number, rest: number) {
         setTotal(total);
-        setRest(updRest);
-        const newMixtures = calcMixtures(total, updRest, dosageConfig.dosages)
+        setRest(rest);
+
+        const delta = total - rest;
+
+        //const totalArea = dosageConfig.sprayDosage * total;
+        //const restArea = dosageConfig.sprayDosage * rest;
+        const deltaArea = calcArea(delta, dosageConfig.sprayDosage);
+
+        const newMixtures = calcMixtures(deltaArea, dosageConfig.sprayDosage, dosageConfig.dosages)
         setMixtures(newMixtures);
     }
 
@@ -64,7 +70,7 @@ export default function Calculator() {
             <div>
                 <Toolbar start={startContent} center={centerContent} end={endContent} className="toolbar-borderless"/>
             </div>
-            <div className="mt-2 mb-2">Für fehlende {formatNumber(calcDelta(total, rest).area, "ha")} einfüllen:</div>
+            <div className="mt-2 mb-2">Für fehlende {formatNumber(calcArea(total - rest, dosageConfig.sprayDosage), "ha")} einfüllen &darr;</div>
 
             <DataTable value={mixtures} showHeaders={false}>
                 <Column field="medium" header="Name"></Column>
@@ -78,15 +84,17 @@ export default function Calculator() {
             <div className="footer">
                 <div>
                     <VolumeAreaSlider label="Rest"
-                                      data={rest}
+                                      volume={rest}
+                                      sprayDosage={dosageConfig.sprayDosage}
                                       minVolume={0}
-                                      maxVolume={total.volume}
+                                      maxVolume={total}
                                       disabled={locked}
                                       onChange={(v) => reCalc(total, v)}/>
                     <VolumeAreaSlider label="Total"
-                                      data={total}
-                                      minVolume={rest.volume}
-                                      maxVolume={dosageConfig.tank.volume}
+                                      volume={total}
+                                      sprayDosage={dosageConfig.sprayDosage}
+                                      minVolume={rest}
+                                      maxVolume={dosageConfig.tankVolume}
                                       disabled={locked}
                                       onChange={(v) => reCalc(v, rest)}/>
                 </div>

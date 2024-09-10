@@ -1,36 +1,46 @@
 import {Slider, SliderChangeEvent} from "primereact/slider";
 import {Button} from "primereact/button";
-import {VolumeArea} from "../types";
 import {formatNumber} from "../utils.ts";
+import {calcArea} from "../calculation-logic.ts";
 
 export interface VolumeAreaSliderProps {
     label: string;
-    data: VolumeArea;
+    volume: number;
+    sprayDosage: number;
     minVolume?: number;
     maxVolume?: number;
+    stepSize?: number;
     disabled?: boolean;
-    onChange: (value: VolumeArea) => void;
+    onChange: (value: number) => void;
 }
-
 
 export default function VolumeAreaSlider(props: VolumeAreaSliderProps) {
 
+    const stepSize = props.stepSize || 25;
+    const minVolume = props.minVolume || 0;
+    const maxVolume = props.maxVolume || 100;
+
     function addVolume(volume: number) {
-        props.onChange({...props.data, volume: props.data.volume + volume})
+        const newVolume = props.volume + volume;
+        if (newVolume > minVolume && newVolume < maxVolume){
+            props.onChange(newVolume)
+        }
+
     }
 
     return (
         <>
-            <div className="mt-1">{props.label}: {props.data.volume + " l"} &rarr; {formatNumber(props.data.area, "ha")}</div>
+            <div className="mt-1">{props.label}: {props.volume + " l"} &rarr; {formatNumber(calcArea(props.volume, props.sprayDosage), "ha")}</div>
 
             <div className="flex align-items-center mb-1">
                 <div className="flex-grow-1 mr-3">
                     <Slider
-                        value={props.data.volume}
-                        min={props.minVolume || 0}
-                        max={props.maxVolume || 100}
+                        value={props.volume}
+                        min={minVolume}
+                        max={maxVolume}
+                        step={stepSize}
                         onChange={(e: SliderChangeEvent) => {
-                            props.onChange({...props.data, volume: e.value as number});
+                            props.onChange(e.value as number);
                         }}
                         className="ml-1 w-full"
                         disabled={props.disabled || false}
@@ -42,7 +52,7 @@ export default function VolumeAreaSlider(props: VolumeAreaSliderProps) {
                     className="mr-1 small"
                     size="small"
                     onClick={() => {
-                        addVolume(-1);
+                        addVolume(-stepSize);
                     }}
                     disabled={props.disabled}
                 />
@@ -52,7 +62,7 @@ export default function VolumeAreaSlider(props: VolumeAreaSliderProps) {
                     className="mr-1 small"
                     size="small"
                     onClick={() => {
-                        addVolume(1);
+                        addVolume(stepSize);
                     }}
                     disabled={props.disabled}
                 />

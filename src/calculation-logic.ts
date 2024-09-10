@@ -1,29 +1,31 @@
-import {MediumDosage, MediumMixture, VolumeArea} from "./types";
+import {MediumDosage, MediumMixture} from "./types";
 
-export function calcDelta(total: VolumeArea, rest: VolumeArea): VolumeArea {
-    return {
-        volume: total.volume - rest.volume,
-        area: total.area - rest.area
-    } as VolumeArea;
+export function calcArea(volume: number, dosage: number): number {
+    return volume / dosage;
 }
 
-export function calcMixtures(total: VolumeArea, rest: VolumeArea, dosages: MediumDosage[]): MediumMixture[] {
-    const delta = calcDelta(total, rest);
+export function calcMixtures(area: number, sprayDosage: number, dosages: MediumDosage[]): MediumMixture[] {
+
     let sumMediumDosages: number = 0;
-    const newMixtures = dosages.map(dosage => {
+    const newMixtures = dosages
+        .filter(dosage => {
+            const m = dosage.medium ?? "";
+            const d = dosage.dosage ?? 0;
+            return m.length > 0 && d > 0;
+        })
+        .map(dosage => {
             const mixture: MediumMixture = {
                 ...dosage,
-                volume: dosage.dosage * delta.area
+                volume: dosage.dosage * area
             };
             sumMediumDosages += mixture.dosage;
             return mixture;
         }
     );
-    const deltaDosage = delta.volume / delta.area;
     const water: MediumMixture = {
         medium: "Wasser",
-        dosage: deltaDosage - sumMediumDosages,
-        volume: deltaDosage * delta.area
+        dosage: sprayDosage - sumMediumDosages,
+        volume: sprayDosage * area
     }
     return [water, ...newMixtures];
 }
