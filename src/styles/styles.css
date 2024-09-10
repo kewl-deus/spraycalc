@@ -76,3 +76,8 @@ button.small {
 .p-slider .p-slider-handle {
     transform: scale(1.25);
 }
+
+
+.p-datatable tbody td {
+    padding: 0.8rem 1rem;
+}

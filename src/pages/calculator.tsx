@@ -72,7 +72,7 @@ export default function Calculator() {
             </div>
             <div className="mt-2 mb-2">Für fehlende {formatNumber(calcArea(total - rest, dosageConfig.sprayDosage), "ha")} einfüllen &darr;</div>
 
-            <DataTable value={mixtures} showHeaders={false}>
+            <DataTable value={mixtures} showHeaders={false} size="normal" stripedRows={false}>
                 <Column field="medium" header="Name"></Column>
                 <Column field="dosage" header="Dosierung" dataType="numeric" align="right"
                         body={(rowData: MediumMixture) => formatNumber(rowData.dosage, "l/ha")}/>
