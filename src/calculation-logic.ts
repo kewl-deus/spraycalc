@@ -1,4 +1,5 @@
 import {MediumDosage, MediumMixture} from "./types";
+import {WATER_ID, WATER_NAME} from "./defaults.ts";
 
 export function calcArea(volume: number, dosage: number): number {
     return volume / dosage;
@@ -23,7 +24,8 @@ export function calcMixtures(area: number, sprayDosage: number, dosages: MediumD
         }
     );
     const water: MediumMixture = {
-        medium: "Wasser",
+        id: WATER_ID,
+        medium: WATER_NAME,
         dosage: sprayDosage - sumMediumDosages,
         volume: sprayDosage * area
     }

@@ -17,6 +17,9 @@ export const sampleDosageConfig: DosageConfig = {
 
 export const defaultDosageConfig: DosageConfig = createEmptyDosageConfig(8);
 
+export const WATER_ID: number = 0;
+export const WATER_NAME: string = "Wasser";
+
 export function createEmptyDosageConfig(mediumCount: number): DosageConfig{
     return {
         tankVolume: 0,
