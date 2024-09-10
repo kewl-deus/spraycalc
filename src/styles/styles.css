@@ -70,3 +70,9 @@ button.small {
     text-decoration: none;
     padding: 0.6rem;
 }
+
+
+/* Größerer Slider-Handle */
+.p-slider .p-slider-handle {
+    transform: scale(1.25);
+}

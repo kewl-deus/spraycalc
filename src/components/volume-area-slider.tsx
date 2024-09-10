@@ -33,7 +33,7 @@ export default function VolumeAreaSlider(props: VolumeAreaSliderProps) {
             <div className="mt-1">{props.label}: {props.volume + " l"} &rarr; {formatNumber(calcArea(props.volume, props.sprayDosage), "ha")}</div>
 
             <div className="flex align-items-center mb-1">
-                <div className="flex-grow-1 mr-3">
+                <div className="flex-grow-1 mr-4">
                     <Slider
                         value={props.volume}
                         min={minVolume}
@@ -42,7 +42,7 @@ export default function VolumeAreaSlider(props: VolumeAreaSliderProps) {
                         onChange={(e: SliderChangeEvent) => {
                             props.onChange(e.value as number);
                         }}
-                        className="ml-1 w-full"
+                        className="ml-2 w-full"
                         disabled={props.disabled || false}
                     />
                 </div>
@@ -59,7 +59,7 @@ export default function VolumeAreaSlider(props: VolumeAreaSliderProps) {
                 <Button
                     icon="pi pi-plus"
                     severity="success"
-                    className="mr-1 small"
+                    className="small"
                     size="small"
                     onClick={() => {
                         addVolume(stepSize);
