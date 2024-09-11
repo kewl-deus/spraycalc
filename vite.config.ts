@@ -12,7 +12,7 @@ export default defineConfig({
             injectRegister: 'script',
 
             pwaAssets: {
-                disabled: false,
+                disabled: true,
                 config: true,
             },
 
@@ -21,6 +21,26 @@ export default defineConfig({
                 short_name: 'Spray Calc',
                 description: 'Spray Calculation App',
                 theme_color: '#689f38',
+                icons: [
+                    {
+                        src: "logo-64x64.png",
+                        sizes: "64x64",
+                        type: "image/png"
+                    }, {
+                        src: "logo-192x192.png",
+                        sizes: "192x192",
+                        type: "image/png"
+                    }, {
+                        src: "logo-512x512.png",
+                        sizes: "512x512",
+                        type: "image/png"
+                    }, {
+                        src: "maskable-logo-512x512.png",
+                        sizes: "512x512",
+                        type: "image/png",
+                        purpose: "maskable"
+                    }
+                ]
             },
 
             workbox: {
