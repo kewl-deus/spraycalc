@@ -42,14 +42,14 @@ export default function VolumeAreaSlider(props: VolumeAreaSliderProps) {
                         onChange={(e: SliderChangeEvent) => {
                             props.onChange(e.value as number);
                         }}
-                        className="ml-2 w-full"
+                        className="w-full"
                         disabled={props.disabled || false}
                     />
                 </div>
                 <Button
                     icon="pi pi-minus"
                     severity="danger"
-                    className="mr-1 small"
+                    className="small"
                     size="small"
                     onClick={() => {
                         addVolume(-stepSize);

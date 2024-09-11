@@ -23,18 +23,19 @@ button.small {
 }
 
 .topbar {
-    position: fixed;
-    height: 5rem;
-    z-index: 997;
+    /* position: fixed;
     left: 0;
     top: 0;
+    */
+    z-index: 997;
+    height: 5rem;
     width: 100%;
     padding: 0 2rem;
-    background-color: var(--surface-card);
+    background-color: #f8f9fa;
     transition: left .2s;
     display: flex;
     align-items: center;
-    box-shadow: 0 3px 5px rgba(0, 0, 0, .02), 0 0 2px rgba(0, 0, 0, .05), 0 1px 4px rgba(0, 0, 0, .08);
+    /* box-shadow: 0 3px 5px rgba(0, 0, 0, .02), 0 0 2px rgba(0, 0, 0, .05), 0 1px 4px rgba(0, 0, 0, .08); */
     text-align: center;
 }
 
@@ -78,6 +79,20 @@ button.small {
 }
 
 
+.p-button.no-hover:hover {
+    background-color: inherit; /* Verhindert das Ändern der Hintergrundfarbe beim Hover */
+    box-shadow: none; /* Entfernt den Hover-Schatten */
+}
+
+
+/* Tabelle Zeilenhöhe verringern */
 .p-datatable tbody td {
-    padding: 0.8rem 1rem;
+    padding: 0.8rem 0.4rem;
+}
+
+.column-no-overflow {
+    overflow: hidden;
+    text-overflow: ellipsis; /* um abgeschnittenen Text mit "..." darzustellen */
+    white-space: nowrap;
+    word-break: break-all;
 }

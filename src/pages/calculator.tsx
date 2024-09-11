@@ -5,12 +5,14 @@ import {DosageConfig, MediumMixture} from "../types";
 import VolumeAreaSlider from "../components/volume-area-slider.tsx";
 import {calcArea, calcMixtures} from "../calculation-logic.ts";
 import {Button} from "primereact/button";
-import {Link} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {Toolbar} from "primereact/toolbar";
 import {formatNumber} from "../utils.ts";
 import {defaultDosageConfig} from "../defaults.ts";
 
 export default function Calculator() {
+
+    const navigate = useNavigate(); // Hook für Navigation
 
     //@typescript-eslint/no-unused-vars
     const [dosageConfig] = useState<DosageConfig>(() => {
@@ -51,7 +53,11 @@ export default function Calculator() {
 
     const startContent = (
         <React.Fragment>
-            <Button icon={"pi " + getLockIcon()} onClick={() => setLocked(!locked)}/>
+            <Button icon={"pi " + getLockIcon()}
+                    className="no-hover"
+                    text={true}
+                    size="large"
+                    onClick={() => setLocked(!locked)}/>
         </React.Fragment>
     );
 
@@ -61,7 +67,15 @@ export default function Calculator() {
 
     const endContent = (
         <React.Fragment>
-            <Link to="/dosage" className="p-button pi pi-cog topbar-link-button"/>
+            <Button
+                icon="pi pi-angle-right"
+                iconPos="right"
+                label="Dosierung"
+                className="no-hover"
+                text={true}
+                disabled={locked}
+                onClick={() => navigate('/dosage')}
+            />
         </React.Fragment>
     );
 
@@ -73,16 +87,23 @@ export default function Calculator() {
             <div className="mt-2 mb-2">Für fehlende {formatNumber(calcArea(total - rest, dosageConfig.sprayDosage), "ha")} einfüllen &darr;</div>
 
             <DataTable value={mixtures} showHeaders={false} size="normal" stripedRows={false}>
-                <Column field="medium" header="Name"></Column>
+                <Column field="medium" header="Name"
+                        className="column-no-overflow"
+                        style={{maxWidth: '140px' }}>
+                </Column>
                 <Column field="dosage" header="Dosierung" dataType="numeric" align="right"
+                        className="column-no-overflow"
+                        style={{maxWidth: '120px'}}
                         body={(rowData: MediumMixture) => formatNumber(rowData.dosage, "l/ha")}/>
                 <Column field="volume" header="Volume" dataType="numeric" align="right"
+                        className="column-no-overflow"
+                        style={{maxWidth: '120px'}}
                         body={(rowData: MediumMixture) => formatNumber(rowData.volume, "l")}/>
             </DataTable>
 
 
-            <div className="footer">
-                <div>
+            <footer className="footer">
+                <div className="pl-2 pr-2">
                     <VolumeAreaSlider label="Rest"
                                       volume={rest}
                                       sprayDosage={dosageConfig.sprayDosage}
@@ -98,7 +119,7 @@ export default function Calculator() {
                                       disabled={locked}
                                       onChange={(v) => reCalc(v, rest)}/>
                 </div>
-            </div>
+            </footer>
         </>
     )
 }

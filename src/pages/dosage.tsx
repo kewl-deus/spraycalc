@@ -1,6 +1,6 @@
 import {Toolbar} from "primereact/toolbar";
 import React, {useEffect, useState} from "react";
-import {Link} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {DosageConfig} from "../types";
 import {InputText} from "primereact/inputtext";
 import {InputNumber, InputNumberValueChangeEvent} from "primereact/inputnumber";
@@ -8,6 +8,8 @@ import {Button} from "primereact/button";
 import {defaultDosageConfig, appVersion} from "../defaults.ts";
 
 export default function DosagePage() {
+
+    const navigate = useNavigate(); // Hook für Navigation
 
     const [dosageConfig, setDosageConfig] = useState<DosageConfig>(() => {
         const persistedState = window.localStorage.getItem("dosageConfig");
@@ -25,7 +27,13 @@ export default function DosagePage() {
 
     const startContent = (
         <React.Fragment>
-            <Link to="/calculator" className="p-button pi pi-calculator topbar-link-button"/>
+            <Button
+                icon="pi pi-angle-left"
+                label="Spray Calc"
+                className="no-hover"
+                text={true}
+                onClick={() => navigate('/calculator')}
+            />
         </React.Fragment>
     );
 
@@ -69,10 +77,13 @@ export default function DosagePage() {
     return (
         <div className="flex flex-column" style={{minHeight: '100vh'}}>
             {/* Topbar */}
-            <Toolbar start={startContent} center={centerContent} className="toolbar-borderless"/>
+
+            <Toolbar start={startContent} center={centerContent} className="toolbar-borderless topbar"
+                     style={{paddingLeft: '0'}}/>
+
 
             {/* Scrollbarer Inhalt */}
-            <div className="flex-grow-1" style={{overflowY: 'auto'}}>
+            <div className="flex-grow-1 mt-2 mb-2" style={{overflowY: 'auto'}}>
                 <div className="mt-2">
                     <div className="formgroup-inline">
                         <div style={{
@@ -145,12 +156,12 @@ export default function DosagePage() {
                                     value={dosageConfig.dosages[index].dosage}
                                     onValueChange={(e: InputNumberValueChangeEvent) => updateMediumDosage(index, "dosage", Number(e.value))}
                                     locale="de-DE"
-                                    minFractionDigits={3}
                                     showButtons={false} buttonLayout="horizontal" step={0.1}
                                     incrementButtonClassName="p-button-success" incrementButtonIcon="pi pi-plus"
                                     decrementButtonIcon="pi pi-minus" decrementButtonClassName="p-button-danger"
-                                    mode="decimal"
                                     min={0}
+                                    minFractionDigits={3}
+                                    mode="decimal"
                                     className="input-number-right"
                                 />
                             </div>
@@ -172,7 +183,7 @@ export default function DosagePage() {
                 </div>
             </div>
 
-            <footer className="footer" style={{padding: '0'}}>
+            <footer className="footer pl-2 pr-2">
                 <Toolbar start={footerStartContent} end={footerEndContent} className="toolbar-borderless"/>
             </footer>
 
