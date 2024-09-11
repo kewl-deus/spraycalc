@@ -42,5 +42,5 @@ export default defineConfig({
     },
     preset: preset,
     //preset: splashScreenPreset,
-    images: ['public/image.jpg'],
+    images: ['public/logo.png'],
 })

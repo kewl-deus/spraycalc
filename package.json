@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "predeploy": "pnpm run build",
     "deploy": "gh-pages -d dist",
+    "upload": "gh-pages -d dist",
     "serve": "npx serve dist",
     "nginx": "docker run -p 80:80 -v ./dist:/usr/share/nginx/html/spraycalc nginx"
   },
