@@ -1,7 +1,6 @@
 import './App.css'
 import Calculator from "./pages/calculator.tsx";
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
-import Settings from "./pages/settings.tsx";
 import DosagePage from "./pages/dosage.tsx";
 
 function App() {
@@ -11,7 +10,6 @@ function App() {
             <Routes>
                 <Route path="/calculator" element={<Calculator />} />
                 <Route path="/dosage" element={<DosagePage />} />
-                <Route path="/settings" element={<Settings />} />
                 {/* Default route */}
                 <Route index element={<Navigate to="/calculator" replace />} />
                 <Route path="*" element={<Navigate to="/calculator" replace />} />
