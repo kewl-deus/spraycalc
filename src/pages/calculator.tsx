@@ -1,7 +1,7 @@
 import {DataTable} from "primereact/datatable";
 import {Column} from "primereact/column";
 import React, {useEffect, useState} from "react";
-import {DosageConfig, MediumMixture} from "../types";
+import {DosageConfig, MediumMixture, TankStatus} from "../types";
 import VolumeAreaSlider from "../components/volume-area-slider.tsx";
 import {calcArea, calcMixtures} from "../calculation-logic.ts";
 import {Button} from "primereact/button";
@@ -23,24 +23,38 @@ export default function Calculator() {
         return defaultDosageConfig;
     });
 
+    const [tankStatus, setTankStatus] = useState<TankStatus>(() => {
+        const persistedState = window.localStorage.getItem("tankStatus");
+        let ts = {total: dosageConfig.tankVolume, rest: 0} as TankStatus;
+        if (persistedState) {
+            //console.log("Reading from LocalStorage", "tankStatus", persistedState);
+            ts = JSON.parse(persistedState) as TankStatus;
+        }
+        ts.total = Math.min(dosageConfig.tankVolume, ts.total);
+        if (ts.rest > ts.total){
+            ts.rest = ts.total;
+        }
+        return ts;
+    });
+
+    useEffect(() => {
+        //console.log("Writing to LocalStorage", "tankStatus", tankStatus);
+        window.localStorage.setItem("tankStatus", JSON.stringify(tankStatus));
+    }, [dosageConfig, tankStatus]);
+
     const [locked, setLocked] = useState(false);
-    const [total, setTotal] = useState<number>(dosageConfig.tankVolume);
-    const [rest, setRest] = useState<number>(0);
     const [mixtures, setMixtures] = useState<MediumMixture[]>([]);
 
 
     useEffect(() => {
-        reCalc(total, rest);
+        reCalc(tankStatus);
     }, [])
 
-    function reCalc(total: number, rest: number) {
-        setTotal(total);
-        setRest(rest);
+    function reCalc(ts: TankStatus) {
+        setTankStatus(ts);
 
-        const delta = total - rest;
+        const delta = ts.total - ts.rest;
 
-        //const totalArea = dosageConfig.sprayDosage * total;
-        //const restArea = dosageConfig.sprayDosage * rest;
         const deltaArea = calcArea(delta, dosageConfig.sprayDosage);
 
         const newMixtures = calcMixtures(deltaArea, dosageConfig.sprayDosage, dosageConfig.dosages)
@@ -84,7 +98,7 @@ export default function Calculator() {
             <div>
                 <Toolbar start={startContent} center={centerContent} end={endContent} className="toolbar-borderless"/>
             </div>
-            <div className="mt-2 mb-2">Für fehlende {formatNumber(calcArea(total - rest, dosageConfig.sprayDosage), "ha")} einfüllen &darr;</div>
+            <div className="mt-2 mb-2">Für fehlende {formatNumber(calcArea(tankStatus.total - tankStatus.rest, dosageConfig.sprayDosage), "ha")} einfüllen &darr;</div>
 
             <DataTable value={mixtures} showHeaders={false} size="normal" stripedRows={false}>
                 <Column field="medium" header="Name"
@@ -105,19 +119,19 @@ export default function Calculator() {
             <footer className="footer">
                 <div className="pl-2 pr-2">
                     <VolumeAreaSlider label="Rest"
-                                      volume={rest}
+                                      volume={tankStatus.rest}
                                       sprayDosage={dosageConfig.sprayDosage}
                                       minVolume={0}
-                                      maxVolume={total}
+                                      maxVolume={tankStatus.total}
                                       disabled={locked}
-                                      onChange={(v) => reCalc(total, v)}/>
+                                      onChange={(v) => reCalc({...tankStatus, rest: v})}/>
                     <VolumeAreaSlider label="Total"
-                                      volume={total}
+                                      volume={tankStatus.total}
                                       sprayDosage={dosageConfig.sprayDosage}
-                                      minVolume={rest}
+                                      minVolume={tankStatus.rest}
                                       maxVolume={dosageConfig.tankVolume}
                                       disabled={locked}
-                                      onChange={(v) => reCalc(v, rest)}/>
+                                      onChange={(v) => reCalc({...tankStatus, total: v})}/>
                 </div>
             </footer>
         </>

@@ -33,4 +33,4 @@ export function createEmptyDosageConfig(mediumCount: number): DosageConfig{
     } as DosageConfig;
 }
 
-export const appVersion: string = "0.2";
+export const appVersion: string = "0.3";
