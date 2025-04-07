@@ -23,11 +23,12 @@ export function calcMixtures(area: number, sprayDosage: number, dosages: MediumD
             return mixture;
         }
     );
+    const waterDosage = sprayDosage - sumMediumDosages;
     const water: MediumMixture = {
         id: WATER_ID,
         medium: WATER_NAME,
-        dosage: sprayDosage - sumMediumDosages,
-        volume: sprayDosage * area
+        dosage: waterDosage,
+        volume: waterDosage * area
     }
     return [water, ...newMixtures];
 }
