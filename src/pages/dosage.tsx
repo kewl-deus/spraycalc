@@ -46,7 +46,8 @@ export default function DosagePage() {
             <Button icon="pi pi-trash" className="p-button-danger" size="small" label="Reset"
                     onClick={() => {
                         console.log("Reset");
-                        setDosageConfig(defaultDosageConfig);
+                        // we only reset the mixture dosages, not the tank and spray dosage
+                        setDosageConfig({...dosageConfig, dosages: defaultDosageConfig.dosages});
                     }}/>
         </React.Fragment>
     );
